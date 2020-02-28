@@ -1,0 +1,116 @@
+{
+  "name": "framos_viewer",
+  "modules": [
+    "framosD435e",
+    "@com_nvidia_isaac//packages/viewers"
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "name": "camera",
+        "components": [
+          {
+            "name": "message_ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "realsense",
+            "type": "isaac::RealsenseCamera"
+          }
+        ]
+      },
+      {
+        "name": "viewer",
+        "components": [
+          {
+            "name": "message_ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "depth",
+            "type": "isaac::viewers::DepthCameraViewer"
+          },
+          {
+            "name": "color",
+            "type": "isaac::viewers::ColorCameraViewer"
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "source": "camera/realsense/depth",
+        "target": "viewer/depth/depth_listener"
+      },
+      {
+        "source": "camera/realsense/color",
+        "target": "viewer/color/color_listener"
+      }
+    ]
+  },
+  "config": {
+    "camera": {
+      "realsense": {
+        "rows": 1280,
+        "cols": 720,
+        "rgb_framerate": 30,
+        "depth_framerate": 30,
+        "align_to_color": true,
+        "frame_queue_size": 2,
+        "auto_exposure_priority": false
+    }
+    },
+    "viewer": {
+      "color": {
+        "reduce_scale": 2
+      },
+      "depth": {
+        "reduce_scale": 2,
+        "min_visualization_depth": 0.2,
+        "max_visualization_depth": 5.0,
+        "camera_name": "Realsense",
+        "colormap": [
+          [128,   0,   0],
+          [255,   0,   0],
+          [255, 255,   0],
+          [0,   255, 255],
+          [0,     0, 255],
+          [0,     0, 128]
+        ]
+      }
+    },
+    "websight": {
+      "WebsightServer": {
+        "port": 3000,
+        "ui_config": {
+          "windows": {
+            "Framos D435e - Color": {
+              "renderer": "2d",
+              "dims": {
+                "width": 1280,
+                "height": 720
+              },
+              "channels": [
+                {
+                  "name": "realsense_camera/viewer/color/Color"
+                }
+              ]
+            },
+            "Framos D435e - Depth": {
+              "renderer": "2d",
+              "dims": {
+                "width": 1280,
+                "height": 720
+              },
+              "channels": [
+                {
+                  "name": "realsense_camera/viewer/depth/Depth"
+                }
+              ]
+            }
+         }
+        }
+      }
+    }
+  }
+}

@@ -26,23 +26,29 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-workspace(name = "velodyne_lidar")
+workspace(name = "framos")
 
-# Point following dependency to Isaac SDK downloaded from https://developer.nvidia.com/isaac/downloads
+# Point following dependency to Isaac SDK night Release 0528 downloaded from https://developer.nvidia.com/isaac/downloads
 local_repository(
     name = "com_nvidia_isaac",
-    path = "ISAAC_SDK_NIGHTLY_RELEASE",
+    path = "/home/tconceicao/Isaac/isaac",
 )
 
+load("@com_nvidia_isaac//engine/build:isaac.bzl", "isaac_git_repository", "isaac_new_http_archive")
 load("@com_nvidia_isaac//third_party:engine.bzl", "isaac_engine_workspace")
 load("@com_nvidia_isaac//third_party:packages.bzl", "isaac_packages_workspace")
-load("@com_nvidia_isaac//engine/build:isaac.bzl", "isaac_git_repository", "isaac_new_http_archive")
+load("@com_nvidia_isaac//third_party:ros.bzl", "isaac_ros_workspace")
+load("@com_nvidia_isaac//third_party:zed.bzl", "isaac_zed_workspace")
 
 isaac_engine_workspace()
 
 isaac_packages_workspace()
 
-# Loads before boost to override for aarch64 specific config
+isaac_ros_workspace()
+
+isaac_zed_workspace()
+
+
 isaac_new_http_archive(
     name = "org_lzma_lzma",
     build_file = "@com_nvidia_isaac//third_party:lzma.BUILD",
@@ -55,12 +61,12 @@ isaac_new_http_archive(
 
 # Loads boost c++ library (https://www.boost.org/) and
 # custom bazel build support (https://github.com/nelhage/rules_boost/)
-# explicitly due to bazel bug: https://github.com/bazelbuild/bazel/issues/1550
+# explicitly for cartographer
+# due to bazel bug: https://github.com/bazelbuild/bazel/issues/1550
 isaac_git_repository(
     name = "com_github_nelhage_rules_boost",
     commit = "82ae1790cef07f3fd618592ad227fe2d66fe0b31",
     licenses = ["@com_github_nelhage_rules_boost//:LICENSE"],
-    patches = ["@com_nvidia_isaac//third_party:rules_boost.patch"],
     remote = "https://github.com/nelhage/rules_boost.git",
 )
 
@@ -68,6 +74,7 @@ load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
 
 boost_deps()
 
+####################################################################################################
 # Configures toolchain
 load("@com_nvidia_isaac//engine/build/toolchain:toolchain.bzl", "toolchain_configure")
 
@@ -75,8 +82,8 @@ toolchain_configure(name = "toolchain")
 
 ####################################################################################################
 
-# Velodyne Lidar specific dependencies
+# framos_workspace specific dependencies
 
-load(":repositories.bzl", "velodyne_lidar_workspace")
+load(":repositories.bzl", "framos_workspace")
 
-velodyne_lidar_workspace()
+framos_workspace()

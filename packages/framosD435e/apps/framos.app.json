@@ -1,0 +1,39 @@
+{
+  "name": "framos_viewer",
+  "modules": [
+    "framosD435e"
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "name": "camera",
+        "components": [
+          {
+            "name": "message_ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "realsense",
+            "type": "isaac::RealsenseCamera"
+          }
+        ]
+      }
+    ],
+    "edges": [
+      
+    ]
+  },
+  "config": {
+    "camera": {
+      "realsense": {
+        "rows": 720,
+        "cols": 1280,
+        "rgb_framerate": 30,
+        "depth_framerate": 30,
+        "align_to_color": true,
+        "frame_queue_size": 2,
+        "auto_exposure_priority": false
+     }
+    }
+  }
+}
