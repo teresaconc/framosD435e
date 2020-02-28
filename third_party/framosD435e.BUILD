@@ -166,10 +166,10 @@ cc_library(
 cc_library( 
     name = "camerasuite",
    # This doesn't seem to have any impact
-   #srcs = [
-   #     "third-party/framos/camerasuite/include/smcs_cpp/CameraSDK.cpp",
-   #     "third-party/framos/camerasuite/lib/libCameraSuite.so",
-   #],
+   srcs = [
+        "third-party/framos/camerasuite/include/smcs_cpp/CameraSDK.cpp",
+        "third-party/framos/camerasuite/lib/libCameraSuite.so",
+   ],
     hdrs = glob(["third-party/framos/camerasuite/include/**/*.h"]),
     includes = [
         "third-party/framos/camerasuite/include",
